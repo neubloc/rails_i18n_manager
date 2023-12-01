@@ -9,7 +9,7 @@ module RailsI18nManager
       if import_file.end_with?(".json")
         translations_hash = JSON.parse(File.read(import_file))
       else
-        translations_hash = YAML.safe_load(File.read(import_file))
+        translations_hash = YAML.safe_load(File.read(import_file), [Symbol])
       end
 
       new_locales = translations_hash.keys - app_record.all_locales
