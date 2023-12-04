@@ -18,7 +18,7 @@ class AddRailsI18nManagerTables < ActiveRecord::Migration[6.0]
     create_table :rails_i18n_manager_translation_values do |t|
       t.references :translation_key, index: { name: 'index_translation_values_on_translation_key_id' }
       t.string :locale, limit: 5
-      t.string :translation
+      t.string :translation, limit: 500
       t.datetime :updated_at
     end
 
