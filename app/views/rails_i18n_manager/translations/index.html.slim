@@ -27,6 +27,7 @@ table.table.table-striped.table-hover.space-above3.list-table
       th Default Translation
       - if params[:status] == "Inactive"
         th Status
+      th Translation SV
       th = sort_link(:updated_at)
       th Actions
   tbody
@@ -37,6 +38,7 @@ table.table.table-striped.table-hover.space-above3.list-table
         td = x.default_translation
         - if params[:status] == "Inactive"
           td Inactive
+        td = x.translation("sv")
         td = x.updated_at&.strftime("%Y-%m-%d %l:%M %p")
         td
           span = link_to "View", {action: :show, id: x.id}
