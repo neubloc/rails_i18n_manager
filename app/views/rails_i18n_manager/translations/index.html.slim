@@ -24,8 +24,11 @@ table.table.table-striped.table-hover.space-above3.list-table
     tr
       th = sort_link(:app_name)
       th = sort_link(:key)
-      th Default Translation
-      th Translation EN
+      - if params[:app_name].present?
+        - @translation_keys.first.translation_app.all_locales.each do |locale|
+          th = "#{locale.upcase}"
+      - else
+        th Default Translation
       - if params[:status] == "Inactive"
         th Status
       th = sort_link(:updated_at)
@@ -35,8 +38,11 @@ table.table.table-striped.table-hover.space-above3.list-table
       tr
         td = x.translation_app.name
         td = x.key
-        td = x.default_translation
-        td = x.translation("en")
+        - if params[:app_name].present?
+          - x.translation_app.all_locales.each do |locale|
+            td = x.translation(locale)
+        - else
+          td = x.default_translation
         - if params[:status] == "Inactive"
           td Inactive
         td = x.updated_at&.strftime("%Y-%m-%d %l:%M %p")
