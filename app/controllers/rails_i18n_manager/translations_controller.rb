@@ -64,6 +64,7 @@ module RailsI18nManager
       @translation_key.assign_attributes(allowed_params)
 
       if @translation_key.save
+        @translation_key.touch
         flash[:notice] = "Update success."
         redirect_to edit_translation_path(@translation_key)
       else
