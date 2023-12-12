@@ -9,7 +9,7 @@ module RailsI18nManager
       if import_file.end_with?(".json")
         translations_hash = JSON.parse(File.read(import_file))
       else
-        translations_hash = YAML.safe_load(File.read(import_file))
+        translations_hash = YAML.safe_load(File.read(import_file), permitted_classes: [Symbol])
       end
 
       new_locales = translations_hash.keys - app_record.all_locales
@@ -43,7 +43,7 @@ module RailsI18nManager
             if val_record.nil?
               translation_values_to_import << key_record.translation_values.new(locale: locale, translation: val)
             elsif val_record.translation.blank? || (overwrite_existing && val_record.translation != val)
-              val_record.update!(translation: val)
+              val_record.update!(translation: val, updated_at: Time.current)
               next
             end
           end
@@ -56,11 +56,11 @@ module RailsI18nManager
       if mark_inactive_translations
         app_record.translation_keys
           .where.not(key: all_keys)
-          .update_all(active: false)
+          .update_all(active: false, updated_at: Time.current)
 
         app_record.translation_keys
           .where(key: all_keys)
-          .update_all(active: true)
+          .update_all(active: true, updated_at: Time.current)
       end
 
       return true

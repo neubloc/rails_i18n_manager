@@ -1,7 +1,7 @@
 .pull-right
-  = link_to "Translate with Google", params.to_unsafe_h.merge(action_name: :translate_missing), class: "btn btn-primary btn-sm", "data-confirm" => "Are you sure you want to proceed with translating the missing translations in the currently filtered list?"
+  = link_to "Translate with Google", translate_missing_translations_path(params.permit!), class: "btn btn-primary btn-sm", data: {method: :post, confirm: "Are you sure you want to proceed with translating the missing translations in the currently filtered list?"}
   = link_to "Import Translations", import_translations_path, class: "btn btn-secondary btn-sm space-left2"
-  = link_to "Delete Inactive", params.to_unsafe_h.merge(action_name: :delete_inactive_keys), class: "btn btn-danger btn-sm space-left2", data: {confirm: "Warning! This is a highly destructive action.\n\nIts possible to incorrectly upload an incomplete or incorrect file to 'Mark Inactive Translations from Source' which can leave you with inactive keys that maybe shouldnt have been inactivated.\n\nPlease proceed only if you are certain that you do not have any keys that are incorrectly marked inactive.\n\nAre you sure you want to proceed with deleting the inactive translations in the currently filtered list?"}
+  = link_to "Delete Inactive", delete_inactive_keys_translations_path(params.permit!), class: "btn btn-danger btn-sm space-left2", data: {method: :delete, confirm: "Warning! This is a highly destructive action.\n\nIts possible to incorrectly upload an incomplete or incorrect file to 'Mark Inactive Translations from Source' which can leave you with inactive keys that maybe shouldnt have been inactivated.\n\nPlease proceed only if you are certain that you do not have any keys that are incorrectly marked inactive.\n\nAre you sure you want to proceed with deleting the inactive translations in the currently filtered list?"}
 
 h2.page-title Translations
 - if params[:app_name]
@@ -24,7 +24,11 @@ table.table.table-striped.table-hover.space-above3.list-table
     tr
       th = sort_link(:app_name)
       th = sort_link(:key)
-      th Default Translation
+      - if params[:app_name].present?
+        - @translation_keys.first.translation_app.all_locales.each do |locale|
+          th = "#{locale.upcase}"
+      - else
+        th Default Translation
       - if params[:status] == "Inactive"
         th Status
       th = sort_link(:updated_at)
@@ -34,7 +38,11 @@ table.table.table-striped.table-hover.space-above3.list-table
       tr
         td = x.translation_app.name
         td = x.key
-        td = x.default_translation
+        - if params[:app_name].present?
+          - x.translation_app.all_locales.each do |locale|
+            td = x.translation(locale)
+        - else
+          td = x.default_translation
         - if params[:status] == "Inactive"
           td Inactive
         td = x.updated_at&.strftime("%Y-%m-%d %l:%M %p")
@@ -47,6 +55,6 @@ table.table.table-striped.table-hover.space-above3.list-table
             span.space-left2 = link_to "Delete", {action: :destroy, id: x.id}, method: :delete, "data-confirm" => "Are you sure you want to delete this translation?"
 
           - if x.any_missing_translations?
-            span.space-left2 = link_to "Translate with Google", translate_missing_translations_path(id: x.id), method: :post, "data-confirm" => "Are you sure you want to proceed with translating the missing translations for this entry?"
+            span.space-left2 = link_to "Translate with Google", translate_missing_translations_path(translation_key_id: x.id), method: :post, "data-confirm" => "Are you sure you want to proceed with translating the missing translations for this entry?"
 
 = paginate @translation_keys, views_prefix: "rails_i18n_manager"

@@ -64,6 +64,7 @@ module RailsI18nManager
       @translation_key.assign_attributes(allowed_params)
 
       if @translation_key.save
+        @translation_key.touch
         flash[:notice] = "Update success."
         redirect_to edit_translation_path(@translation_key)
       else
@@ -89,10 +90,12 @@ module RailsI18nManager
 
       apply_filters
 
-      ids = translation_keys.pluck(:id)
+      ids = @translation_keys.pluck(:id)
 
       TranslationKey.where(id: ids).delete_all
       TranslationValue.where(translation_key_id: ids).delete_all
+
+      redirect_to request.referrer, notice: "Delete Successful"
     end
 
     def import
@@ -183,7 +186,7 @@ module RailsI18nManager
       if params[:translation_key_id]
         url = request.referrer || translation_path(params[:translation_key_id])
       else
-        url = params.to_unsafe_h.merge(action: :index)
+        url = request.referrer
       end
 
       redirect_to url, notice: "Translated #{translated_count} of #{total_missing} total missing translations"
