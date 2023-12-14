@@ -1,5 +1,6 @@
 module RailsI18nManager
   class TranslationKey < ApplicationRecord
+    paginates_per 25
 
     belongs_to :translation_app, class_name: "RailsI18nManager::TranslationApp"
     has_many :translation_values, class_name: "RailsI18nManager::TranslationValue", dependent: :destroy

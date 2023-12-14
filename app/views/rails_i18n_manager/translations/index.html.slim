@@ -24,8 +24,8 @@ table.table.table-striped.table-hover.space-above3.list-table
     tr
       th = sort_link(:app_name)
       th = sort_link(:key)
-      - if params[:app_name].present?
-        - @translation_keys.first.translation_app.all_locales.each do |locale|
+      - if params[:app_name].present? && @translation_keys.first.present?
+        - @translation_keys.first.translation_app.all_locales.to_a.each do |locale|
           th = "#{locale.upcase}"
       - else
         th Default Translation
