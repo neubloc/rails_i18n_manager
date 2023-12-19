@@ -23,6 +23,7 @@ table.table.table-striped.table-hover.space-above3.list-table
   thead
     tr
       th = sort_link(:app_name)
+      th Group
       th = sort_link(:key)
       - if params[:app_name].present? && @translation_keys.first.present?
         - @translation_keys.first.translation_app.all_locales.to_a.each do |locale|
@@ -37,6 +38,7 @@ table.table.table-striped.table-hover.space-above3.list-table
     - @translation_keys.each do |x|
       tr
         td = x.translation_app.name
+        td = x.translation_app.group
         td = x.key
         - if params[:app_name].present?
           - x.translation_app.all_locales.each do |locale|

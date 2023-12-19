@@ -16,6 +16,8 @@ h2
 
   = f.field :name, type: :text
 
+  = f.field :group, type: :text
+
   = f.field :default_locale, type: :select, collection: RailsI18nManager.config.valid_locales.dup, selected: @translation_app.default_locale, include_blank: f.object.default_locale.nil?, input_html: {style: "width:120px;"}
 
   = f.field :additional_locales, type: :select, collection: RailsI18nManager.config.valid_locales.dup, selected: @translation_app.additional_locales_array, include_blank: false, input_html: {multiple: true}, help_text: "Warning: Removing any locale will result in its translations being deleted."

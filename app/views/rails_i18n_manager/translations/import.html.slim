@@ -7,7 +7,7 @@ h2.page-sub-title Import Translations from Source File
     = custom_form_for @form, as: :import_form, url: import_translations_path, method: :post, multipart: true, html: {enctype: "multipart/form-data", class: "form-horizontal"} do |f|
       = f.error_notification
 
-      = f.field :translation_app_id, label: "App Name", type: :select, collection: RailsI18nManager::TranslationApp.order(name: :asc).pluck(:name, :id)
+      = f.select :translation_app_id, grouped_options_for_select(RailsI18nManager::TranslationApp.all.group_by(&:group).map { |group, row| [group, row.pluck(:name, :id)] }), prompt: "Select...", class: "form-select"
 
       = f.field :file, type: :file, label: "Translation File", help_text: "Allowed file types: yml, json"
 

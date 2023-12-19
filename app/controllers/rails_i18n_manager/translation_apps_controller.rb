@@ -64,7 +64,7 @@ module RailsI18nManager
     end
 
     def permitted_params
-      params.require(:translation_app).permit(:name, :default_locale, additional_locales: [])
+      params.require(:translation_app).permit(:name, :group, :default_locale, additional_locales: [])
     end
 
   end

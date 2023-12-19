@@ -1,6 +1,7 @@
 module RailsI18nManager
   class TranslationApp < ApplicationRecord
     NAME = "Translated App".freeze
+    paginates_per 25
 
     has_many :translation_keys, class_name: "RailsI18nManager::TranslationKey", dependent: :destroy
 
@@ -8,9 +9,11 @@ module RailsI18nManager
     after_update :handle_removed_locales
     after_update :handle_added_locales
 
-    validates :name, presence: true, uniqueness: {case_sensitive: false}
+    validates :name, presence: true, uniqueness: { case_sensitive: false }
     validates :default_locale, presence: true
     validate :validate_additional_locales
+
+    validates :group, uniqueness: { scope: :name, case_sensitive: false }, allow_nil: true
 
     scope :search, ->(str){
       fields = [

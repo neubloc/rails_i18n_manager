@@ -1,7 +1,7 @@
 form
   .row.align-items-center.g-1
     .col-auto
-      = select_tag :app_name, options_for_select(RailsI18nManager::TranslationApp.order(name: :asc).pluck(:name), params[:app_name]), prompt: "All Apps", class: "form-select", style: "min-width: 220px"
+      = select_tag :app_name, grouped_options_for_select(RailsI18nManager::TranslationApp.all.group_by(&:group).map { |group, row| [group, row.pluck(:name)] }, params[:app_name]), prompt: "All Apps", class: "form-select", style: "min-width: 440px"
 
     .col-auto
       = select_tag :status, options_for_select([["All Active", nil], "Missing", "Inactive", "All"], params[:status]), class: 'form-select', style: "min-width: 135px;"

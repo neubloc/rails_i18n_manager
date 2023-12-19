@@ -14,6 +14,7 @@ table.table.table-striped.table-hover.space-above3.list-table
   thead
     tr
       th = sort_link(:name)
+      th Group
       th Default Locale
       th Additional Locales
       th Actions
@@ -21,6 +22,7 @@ table.table.table-striped.table-hover.space-above3.list-table
     - @translation_apps.each do |x|
       tr
         td = x.name
+        td = x.group
         td = x.default_locale
         td = x.additional_locales_array.join(", ")
         td
