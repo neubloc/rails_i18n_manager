@@ -65,3 +65,7 @@ form label{
 .ss-option{
   min-height: 32px !important;
 }
+
+.ss-optgroup:has(> .ss-optgroup-label > .ss-optgroup-label-text:empty) .ss-option {
+  padding-left: 0;
+}
